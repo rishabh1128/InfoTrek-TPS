@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [Header("Player Animator and Gravity")]
     [SerializeField] CharacterController characterController;
     [SerializeField] private float gravity = -9.81f;
+    public Animator animator;
 
     [Header("Player Jump and velocity")]
     [SerializeField] private float turnCamTime = 0.1f;
@@ -27,6 +28,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float surfaceDistance = 0.4f;
     [SerializeField] private LayerMask surfaceMask;
 
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;  
+    }
     private void Update()
     {
         ApplyGravity();
@@ -54,22 +59,45 @@ public class Player : MonoBehaviour
 
         if(direction.magnitude >= 0.1f)
         {
+
+            animator.SetBool("Idle", false);
+            //animator.SetBool("Aim", false);
+
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y; //get the angle we want the character to face after movement
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle,ref turnCamVelocity,turnCamTime); //to smoothen the angle change
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
             
             CheckSprint();
             
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward; //move player in direction of camera
             characterController.Move(moveDirection * speed * Time.deltaTime);
+        }
+
+        else
+        {
+            animator.SetBool("Walk", false);
+            animator.SetBool("Running", false);
+            animator.SetBool("Idle", true);
         }
     }
 
     private void Jump()
     {
+        //TODO : Remove the bug that allows player to jump while in the "Jump" state
+
         if (Input.GetButtonDown("Jump") && onSurface)
         {
+            animator.SetTrigger("Jump");
+            animator.SetBool("Idle", false);
+            animator.SetBool("Walk", false);
+            animator.SetBool("Running", false);
+            
             velocity.y = Mathf.Sqrt(jumpRange * -2f * gravity);
+        }
+        else
+        {
+            animator.ResetTrigger("Jump");
+            animator.SetBool("Idle", true);
         }
     }
 
@@ -78,10 +106,29 @@ public class Player : MonoBehaviour
         if(Input.GetButton("Sprint") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && onSurface)
         {
             speed = playerSprint;
+            animator.SetBool("Running", true); 
+            animator.SetBool("Walk", false);
         }
         else
         {
             speed = playerWalk;
+            if(onSurface)
+                animator.SetBool("Walk", true);
+            animator.SetBool("Running", false);
         }
+    }
+
+    private void TurnOffAnimations()
+    {
+        animator.SetBool("Idle", false);
+        animator.SetBool("Rifle Walk", false);
+        animator.SetBool("Shoot Walk", false);
+        animator.SetBool("Aim", false);
+        animator.SetBool("Walk", false);
+        animator.SetBool("Running", false);
+        animator.SetBool("Shoot", false);
+        animator.SetBool("Reloading", false);
+        animator.SetBool("Punch", false);
+        animator.ResetTrigger("Jump");
     }
 }

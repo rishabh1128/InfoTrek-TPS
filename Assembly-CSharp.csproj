@@ -87,12 +87,13 @@
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\BuiltinDebugViewsModel.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\PostProcessingComponent.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Components\EyeAdaptationComponent.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\ChromaticAberrationModel.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\ColorGradingModel.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\ScreenSpaceReflectionModel.cs" />
-    <Compile Include="Assets\Flooded_Grounds\Scripts\DisableRenderer.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Components\DepthOfFieldComponent.cs" />
+    <Compile Include="Assets\Flooded_Grounds\Scripts\DisableRenderer.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Components\ColorGradingComponent.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Components\FogComponent.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\BloomModel.cs" />
@@ -102,7 +103,9 @@
     <Compile Include="Assets\Flooded_Grounds\Scripts\FPSDisplay.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\AntialiasingModel.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\DitheringModel.cs" />
-    <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\Rifle.cs" />
+    <Compile Include="Assets\Scripts\SwitchCamera.cs" />
+    <Compile Include="Assets\Scripts\ObjectToHit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Flooded_Grounds\PostProcessing\Resources\Shaders\ScreenSpaceReflection.shader" />
@@ -729,9 +732,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Cinemachine.csproj">
+      <Project>{03BAA5E7-E334-E367-5527-80739D5060A0}</Project>
+      <Name>Cinemachine</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.VSCode.Editor.csproj">
       <Project>{FDB5C0C0-99BF-972B-7A67-761D148023E1}</Project>
       <Name>Unity.VSCode.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="com.unity.cinemachine.editor.csproj">
+      <Project>{9DFC0F10-F0D6-E4BD-62D4-DCAFD7E13C55}</Project>
+      <Name>com.unity.cinemachine.editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
       <Project>{CC816B21-CA6B-C341-FC8F-29FC5E2B9608}</Project>
@@ -768,14 +779,6 @@
     <ProjectReference Include="UnityEngine.UI.csproj">
       <Project>{19F12796-056D-8016-CBA7-153CFE2301C7}</Project>
       <Name>UnityEngine.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="com.unity.cinemachine.editor.csproj">
-      <Project>{9DFC0F10-F0D6-E4BD-62D4-DCAFD7E13C55}</Project>
-      <Name>com.unity.cinemachine.editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Cinemachine.csproj">
-      <Project>{03BAA5E7-E334-E367-5527-80739D5060A0}</Project>
-      <Name>Cinemachine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
