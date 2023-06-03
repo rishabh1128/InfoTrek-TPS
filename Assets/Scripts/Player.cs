@@ -6,9 +6,9 @@ public class Player : MonoBehaviour
 {
     [Header("Player Movement")] //Adds headers in the inspector panel in Unity
     private float speed;
-    [SerializeField] private float playerWalk = 1.9f;
-    [SerializeField] private float playerSprint = 3f;
-
+    public float playerWalk = 3f;
+    public float playerSprint = 6f;
+    //TODO : change sprint and walk anims
 
     [Header("Player Cameras")]
     [SerializeField] Transform playerCamera;
