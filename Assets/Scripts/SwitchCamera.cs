@@ -9,6 +9,7 @@ public class SwitchCamera : MonoBehaviour
     [SerializeField] private GameObject aimCanvas;
     [SerializeField] private GameObject TPSCam;
     [SerializeField] private GameObject TPSCanvas;
+    public Animator animator;
 
     private void Update()
     {
@@ -18,6 +19,8 @@ public class SwitchCamera : MonoBehaviour
             TPSCanvas.SetActive(false);
             aimCam.SetActive(true);
             aimCanvas.SetActive(true);
+            animator.SetBool("Aim", true);
+            animator.SetBool("Idle", false);
         }
         else
         {
@@ -25,6 +28,7 @@ public class SwitchCamera : MonoBehaviour
             TPSCanvas.SetActive(true);
             aimCam.SetActive(false);
             aimCanvas.SetActive(false);
+            animator.SetBool("Aim", false);
         }
     }
 }

@@ -17,12 +17,13 @@ public class Rifle : MonoBehaviour
     [SerializeField] private int maxAmmo = 32;
     [SerializeField] private int mag = 10;
     private int currentAmmo;
-    [SerializeField] private float reloadTime = 1.3f;
+    public float reloadTime = 2.5f;
     private bool reloading = false;
 
     [Header("Rifle effects")]
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
+    public Animator animator;
 
     private void Awake()
     {
@@ -35,21 +36,48 @@ public class Rifle : MonoBehaviour
         if (reloading)
             return;
 
-        if (currentAmmo <= 0)
+        if (currentAmmo <= 0 || Input.GetKeyDown(KeyCode.R))
         {
+            mag--;
             StartCoroutine(Reload());
             return;
         }
 
-        /*if (Input.GetButtonDown("Fire1"))
-        { 
-            Shoot();
-        }*/
+        //TODO: Whenever shooting or aiming, face the player forward
 
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToShoot)
         {
+            animator.SetBool("Shoot", true);
+            animator.SetBool("Idle", false);
             nextTimeToShoot = Time.time + timeBetweenShots;
             Shoot();
+        }
+        else if (Input.GetButton("Fire1") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
+        {
+            animator.SetBool("Shoot", false);
+            animator.SetBool("Walk", false);
+            animator.SetBool("Shoot Walk", true);
+            animator.SetBool("Idle", false);
+        }
+        else if(Input.GetButton("Fire1"))
+        {
+            animator.SetBool("Shoot", true);
+            animator.SetBool("Idle", false);
+            animator.SetBool("Shoot Walk", false);
+            animator.SetBool("Rifle Walk", false);
+        }
+        else
+        {
+            animator.SetBool("Shoot", false);
+            animator.SetBool("Shoot Walk", false);
+            animator.SetBool("Rifle Walk", false);
+        }
+
+        if (Input.GetButton("Fire2") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
+        {
+            animator.SetBool("Shoot", false);
+            animator.SetBool("Rifle Walk", true);
+            animator.SetBool("Idle", false);
         }
     }
     private void Shoot()
@@ -59,15 +87,12 @@ public class Rifle : MonoBehaviour
 
         if (mag==0)
         {
-            //show out of ammo text
+            //TODO: show out of ammo text
             return;
         }
 
-        if (--currentAmmo == 0)
-        {
-            mag--;
-        }
-        //Update UI
+        --currentAmmo;
+        //TODO: Update UI
 
 
         
@@ -95,11 +120,13 @@ public class Rifle : MonoBehaviour
         player.playerSprint = 0f;
         reloading = true;
         Debug.Log("Reloading..");
+        animator.SetBool("Reloading", true);
+        //play sound
         yield return new WaitForSeconds(reloadTime);
-        //play animation and sound
+        animator.SetBool("Reloading", false);
         currentAmmo = maxAmmo;
-        player.playerWalk = 1.9f;
-        player.playerSprint = 3f;
+        player.playerWalk = 3f;
+        player.playerSprint = 6f;
         reloading = false;
     }
 }

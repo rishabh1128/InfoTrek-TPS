@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     [Header("Player Jump and velocity")]
     [SerializeField] private float turnCamTime = 0.1f;
     [SerializeField] private float turnCamVelocity;
-    [SerializeField] private float jumpRange = 1f;
+    [SerializeField] private float jumpRange = 2f;
     Vector3 velocity;
     [SerializeField] private Transform surfaceCheck;
     private bool onSurface;
@@ -57,16 +57,16 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontal_axis, 0f, vertical_axis).normalized;
 
-        if(direction.magnitude >= 0.1f)
+        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y; //get the angle we want the character to face after movement
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCamVelocity, turnCamTime); //to smoothen the angle change
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+        if (direction.magnitude >= 0.1f)
         {
 
             animator.SetBool("Idle", false);
-            //animator.SetBool("Aim", false);
-
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y; //get the angle we want the character to face after movement
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle,ref turnCamVelocity,turnCamTime); //to smoothen the angle change
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
             
+            //TODO: disable shooting while running and disable running while aiming
             CheckSprint();
             
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward; //move player in direction of camera
@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        //TODO : Remove the bug that allows player to jump while in the "Jump" state
+        //TODO : Remove the bug that allows player to jump while in the "Jump" state (add jump time delay) and disallow jumping while firing
 
         if (Input.GetButtonDown("Jump") && onSurface)
         {
@@ -97,7 +97,6 @@ public class Player : MonoBehaviour
         else
         {
             animator.ResetTrigger("Jump");
-            animator.SetBool("Idle", true);
         }
     }
 
@@ -118,17 +117,5 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void TurnOffAnimations()
-    {
-        animator.SetBool("Idle", false);
-        animator.SetBool("Rifle Walk", false);
-        animator.SetBool("Shoot Walk", false);
-        animator.SetBool("Aim", false);
-        animator.SetBool("Walk", false);
-        animator.SetBool("Running", false);
-        animator.SetBool("Shoot", false);
-        animator.SetBool("Reloading", false);
-        animator.SetBool("Punch", false);
-        animator.ResetTrigger("Jump");
-    }
+
 }

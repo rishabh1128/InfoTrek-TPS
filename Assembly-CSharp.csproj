@@ -94,6 +94,7 @@
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\BuiltinDebugViewsModel.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\PostProcessingComponent.cs" />
+    <Compile Include="Assets\Scripts\RiflePickup.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Components\EyeAdaptationComponent.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\ChromaticAberrationModel.cs" />
@@ -109,10 +110,10 @@
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Attributes\TrackballAttribute.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Components\AmbientOcclusionComponent.cs" />
     <Compile Include="Assets\Flooded_Grounds\Scripts\FPSDisplay.cs" />
+    <Compile Include="Assets\Scripts\PlayerPunch.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\AntialiasingModel.cs" />
     <Compile Include="Assets\Flooded_Grounds\PostProcessing\Runtime\Models\DitheringModel.cs" />
-    <Compile Include="Assets\Scripts\RiflePickup.cs" />
-    <Compile Include="Assets\Scripts\PlayerPunch.cs" />
+    <Compile Include="Assets\Scripts\BasicZombie.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Flooded_Grounds\PostProcessing\Resources\Shaders\ScreenSpaceReflection.shader" />

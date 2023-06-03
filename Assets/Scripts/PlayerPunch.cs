@@ -37,7 +37,7 @@ public class PlayerPunch : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToPunch)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToPunch)
         {
             animator.SetBool("Punch",true);
             animator.SetBool("Idle", false);
@@ -47,7 +47,6 @@ public class PlayerPunch : MonoBehaviour
         else
         {
             animator.SetBool("Punch", false);
-            animator.SetBool("Idle", true);
         }
     }
 }

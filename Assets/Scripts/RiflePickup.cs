@@ -26,9 +26,9 @@ public class RiflePickup : MonoBehaviour
                 PlayerRifle.SetActive(true);
                 player.GetComponent<PlayerPunch>().enabled = false;
 
-                //play pickup sound
+                //TODO: play pickup sound
 
-                //Objective completed
+                //TODO: Objective completed
                 gameObject.SetActive(false);
             }
         }
