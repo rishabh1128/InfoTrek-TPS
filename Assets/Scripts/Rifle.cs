@@ -22,7 +22,8 @@ public class Rifle : MonoBehaviour
 
     [Header("Rifle effects")]
     public ParticleSystem muzzleFlash;
-    public GameObject impactEffect;
+    public GameObject woodEffect;
+    public GameObject goreEffect;
     public Animator animator;
 
     private void Awake()
@@ -101,13 +102,29 @@ public class Rifle : MonoBehaviour
         if(Physics.Raycast(cam.transform.position, cam.transform.forward,out hitInfo, shootingRange))
         {
             Debug.Log(hitInfo.transform.name);
+            
             ObjectToHit objectToHit = hitInfo.transform.GetComponent<ObjectToHit>(); //get the object hit
+            BasicZombie basicZombie = hitInfo.transform.GetComponent<BasicZombie>();
+            Zombie2 zombie2 = hitInfo.transform.GetComponent<Zombie2>();
 
             if (objectToHit != null)
             {
                 objectToHit.ObjectHitDamage(giveDmg); //give damage
-                GameObject impactGo = Instantiate(impactEffect,hitInfo.point,Quaternion.LookRotation(hitInfo.normal)); //show impact
+                GameObject wood = Instantiate(woodEffect,hitInfo.point,Quaternion.LookRotation(hitInfo.normal)); //show impact
+                Destroy(wood, 2.5f);
                 //TODO : add different impact to everything
+            }
+            else if (basicZombie != null)
+            {
+                basicZombie.zombieHitDmg(giveDmg);
+                GameObject gore = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(gore, 2.5f);
+            }
+            else if (zombie2 != null)
+            {
+                zombie2.zombieHitDmg(giveDmg);
+                GameObject gore = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(gore, 2.5f);
             }
         }
 

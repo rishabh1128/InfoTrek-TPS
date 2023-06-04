@@ -8,7 +8,11 @@ public class Player : MonoBehaviour
     private float speed;
     public float playerWalk = 3f;
     public float playerSprint = 6f;
-    //TODO : change sprint and walk anims
+    //TODO : change sprint and walk anims and increase base speed
+
+    [Header("Player Health")]
+    [SerializeField] private float playerHealth = 100f;
+    private float curHealth;
 
     [Header("Player Cameras")]
     [SerializeField] Transform playerCamera;
@@ -30,7 +34,8 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;  
+        Cursor.lockState = CursorLockMode.Locked;
+        curHealth = playerHealth;
     }
     private void Update()
     {
@@ -117,5 +122,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void playerHitDmg(float takeDmg)
+    {
+        curHealth -= takeDmg;
+        if (curHealth <= 0)
+        {
+            PlayerDeath();
+        }
+    }
 
+    private void PlayerDeath()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Destroy(gameObject, 1f);
+    }
 }

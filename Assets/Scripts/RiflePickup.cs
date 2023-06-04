@@ -16,6 +16,8 @@ public class RiflePickup : MonoBehaviour
 
     }
 
+    // TODO: Fix the bug where the rifle randomly shoots a bullet when being picked up
+
     private void Update()
     {
 

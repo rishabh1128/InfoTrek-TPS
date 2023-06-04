@@ -6,11 +6,12 @@ public class PlayerPunch : MonoBehaviour
 {
     [SerializeField] private Camera cam;
     [SerializeField] private float giveDmg = 5f;
-    [SerializeField] private float punchRange = 2f;
-    [SerializeField] private float timeBetweenPunch = 1.33f;
+    [SerializeField] private float punchRange = 3f;
+    [SerializeField] private float timeBetweenPunch = 2f;
     private float nextTimeToPunch = 0f;
     [SerializeField] private GameObject aimCanvas;
-    public GameObject impactEffect;
+    /*public GameObject woodEffect;
+    public GameObject goreEffect;*/
     public Animator animator;
 
     private void Awake()
@@ -24,14 +25,27 @@ public class PlayerPunch : MonoBehaviour
         {
             Debug.Log(hitInfo.transform.name);
             ObjectToHit objectToHit = hitInfo.transform.GetComponent<ObjectToHit>(); //get the object hit
+            BasicZombie basicZombie = hitInfo.transform.GetComponent<BasicZombie>();
+            Zombie2 zombie2 = hitInfo.transform.GetComponent<Zombie2>();
 
             if (objectToHit != null)
             {
                 objectToHit.ObjectHitDamage(giveDmg); //give damage
-                
+                /*GameObject wood = Instantiate(woodEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(wood, 2.5f);*/
             }
-
-            GameObject impactGo = Instantiate(impactEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+            else if (basicZombie != null)
+            {
+                basicZombie.zombieHitDmg(giveDmg);
+                /*GameObject gore = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(gore, 2.5f);*/
+            }
+            else if (zombie2 != null)
+            {
+                zombie2.zombieHitDmg(giveDmg);
+                /*GameObject gore = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(gore, 2.5f);*/
+            }
         }
     }
 
