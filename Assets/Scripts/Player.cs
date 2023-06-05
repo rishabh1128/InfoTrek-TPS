@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public float playerWalk = 3f;
     public float playerSprint = 6f;
     //TODO : change sprint and walk anims and increase base speed
+    //TODO : fix the wonky animation transitions
 
     [Header("Player Health")]
     [SerializeField] private float playerHealth = 100f;

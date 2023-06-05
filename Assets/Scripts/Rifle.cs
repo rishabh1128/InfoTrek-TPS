@@ -20,6 +20,9 @@ public class Rifle : MonoBehaviour
     public float reloadTime = 2.5f;
     private bool reloading = false;
 
+    //TODO: change reloading mechanism to use total bullets instead of mags so u can reload as much as u want without losing bullets
+    //TODO: make a function to turn off all animations except the one to turn on, passed as a string
+
     [Header("Rifle effects")]
     public ParticleSystem muzzleFlash;
     public GameObject woodEffect;
