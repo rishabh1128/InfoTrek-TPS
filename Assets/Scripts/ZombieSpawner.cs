@@ -17,7 +17,7 @@ public class ZombieSpawner : MonoBehaviour
         {
             InvokeRepeating("EnemySpawner", 1f, repeatCycle);
             gameObject.GetComponent<BoxCollider>().enabled = false;
-            Destroy(gameObject, 10f);
+            Destroy(gameObject, 5f);
         }
     }
 

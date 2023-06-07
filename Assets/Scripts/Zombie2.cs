@@ -18,6 +18,7 @@ public class Zombie2 : MonoBehaviour
     [SerializeField] private float giveDmg = 2.5f;
     [SerializeField] private float timeBetweenAttack = 1f;
     private bool previouslyAttacked;
+    [SerializeField] private HealthBar healthBar;
 
    
     /*[SerializeField] private float zombieSpeed = 3f;*/
@@ -35,6 +36,7 @@ public class Zombie2 : MonoBehaviour
     {
         zombieAgent = GetComponent<NavMeshAgent>();
         curHealth = zombieHealth;
+        healthBar.GiveFullHealth(zombieHealth);
     }
 
     private void Update()
@@ -91,8 +93,9 @@ public class Zombie2 : MonoBehaviour
                 if (player != null)
                 {
                     player.playerHitDmg(giveDmg);
-                    GameObject gore = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(gore, 2.5f);
+                    /*GameObject gore = Instantiate(goreEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                    Destroy(gore, 2.5f);*/
+                   
                 }
 
                 animator.SetBool("Running", false);
@@ -111,6 +114,7 @@ public class Zombie2 : MonoBehaviour
     public void zombieHitDmg(float takeDmg)
     {
         curHealth -= takeDmg;
+        healthBar.SetHealth(curHealth);
         if (curHealth <= 0)
         {
             animator.SetBool("Dying", true);

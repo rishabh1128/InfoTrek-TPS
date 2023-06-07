@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     [Header("Player Health")]
     [SerializeField] private float playerHealth = 100f;
     private float curHealth;
+    [SerializeField] private GameObject playerDmgSplash;
+    [SerializeField] private HealthBar healthBar;
 
     [Header("Player Cameras")]
     [SerializeField] Transform playerCamera;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         curHealth = playerHealth;
+        healthBar.GiveFullHealth(playerHealth);
     }
     private void Update()
     {
@@ -108,7 +111,7 @@ public class Player : MonoBehaviour
 
     private void CheckSprint()
     {
-        if(Input.GetButton("Sprint") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && onSurface)
+        if(Input.GetButton("Sprint") && onSurface)
         {
             speed = playerSprint;
             animator.SetBool("Running", true); 
@@ -126,6 +129,10 @@ public class Player : MonoBehaviour
     public void playerHitDmg(float takeDmg)
     {
         curHealth -= takeDmg;
+        healthBar.SetHealth(curHealth);
+
+        StartCoroutine(PlayerDamageDisplay());
+
         if (curHealth <= 0)
         {
             PlayerDeath();
@@ -136,5 +143,12 @@ public class Player : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Destroy(gameObject, 1f);
+    }
+    public IEnumerator PlayerDamageDisplay()
+    {
+        playerDmgSplash.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        playerDmgSplash.SetActive(false);
+
     }
 }

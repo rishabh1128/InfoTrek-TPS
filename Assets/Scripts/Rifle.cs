@@ -14,8 +14,8 @@ public class Rifle : MonoBehaviour
     [SerializeField] private Transform hand;
 
     [Header("Rifle Ammo and shooting")]
-    [SerializeField] private int maxAmmo = 32;
-    [SerializeField] private int mag = 10;
+    [SerializeField] private int magSize = 30;
+    [SerializeField] private int totalAmmo = 330;
     private int currentAmmo;
     public float reloadTime = 2.5f;
     private bool reloading = false;
@@ -32,7 +32,7 @@ public class Rifle : MonoBehaviour
     private void Awake()
     {
         transform.SetParent(hand);
-        currentAmmo = maxAmmo;
+        currentAmmo = magSize;
     }
 
     private void Update()
@@ -40,9 +40,10 @@ public class Rifle : MonoBehaviour
         if (reloading)
             return;
 
-        if (currentAmmo <= 0 || Input.GetKeyDown(KeyCode.R))
+        if (totalAmmo > 0 && (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < magSize)))
         {
-            mag--;
+            int remaining = magSize - currentAmmo;
+            totalAmmo -= remaining;
             StartCoroutine(Reload());
             return;
         }
@@ -89,15 +90,16 @@ public class Rifle : MonoBehaviour
 
         //check mag
 
-        if (mag==0)
+        if (totalAmmo==0 && currentAmmo==0)
         {
             //TODO: show out of ammo text
             return;
         }
 
         --currentAmmo;
-        //TODO: Update UI
+        //TODO: Update UI --- DONE
 
+        AmmoCount.instance.updateAmmo(currentAmmo, totalAmmo);
 
         
         muzzleFlash.Play();
@@ -134,7 +136,7 @@ public class Rifle : MonoBehaviour
         
     }
 
-    IEnumerator Reload() //enumerator tells script to wait without hogging CPU and continue after reloading
+    private IEnumerator Reload() //enumerator tells script to wait without hogging CPU and continue after reloading
     {
         player.playerWalk = 0f;
         player.playerSprint = 0f;
@@ -144,7 +146,8 @@ public class Rifle : MonoBehaviour
         //play sound
         yield return new WaitForSeconds(reloadTime);
         animator.SetBool("Reloading", false);
-        currentAmmo = maxAmmo;
+        currentAmmo = magSize;
+        AmmoCount.instance.updateAmmo(currentAmmo, totalAmmo);
         player.playerWalk = 3f;
         player.playerSprint = 6f;
         reloading = false;
