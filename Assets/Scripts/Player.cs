@@ -142,8 +142,11 @@ public class Player : MonoBehaviour
     private void PlayerDeath()
     {
         Cursor.lockState = CursorLockMode.None;
+        //TODO: death animation??
         Destroy(gameObject, 1f);
+        Menus.instance.ShowGameOver();
     }
+
     public IEnumerator PlayerDamageDisplay()
     {
         playerDmgSplash.SetActive(true);
