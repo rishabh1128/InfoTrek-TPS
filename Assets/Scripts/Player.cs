@@ -6,10 +6,11 @@ public class Player : MonoBehaviour
 {
     [Header("Player Movement")] //Adds headers in the inspector panel in Unity
     private float speed;
-    public float playerWalk = 3f;
-    public float playerSprint = 6f;
-    //TODO : change sprint and walk anims and increase base speed
-    //TODO : fix the wonky animation transitions
+    public float playerWalk = 5f;
+    public float playerSprint = 8f;
+    //TODO : change sprint and walk anims and increase base speed -- DONE
+    //TODO : fix the wonky animation transitions -- DONE
+    //TODO : add a third type of speed for rifle walk
 
     [Header("Player Health")]
     [SerializeField] private float playerHealth = 100f;
@@ -28,7 +29,9 @@ public class Player : MonoBehaviour
     [Header("Player Jump and velocity")]
     [SerializeField] private float turnCamTime = 0.1f;
     [SerializeField] private float turnCamVelocity;
-    [SerializeField] private float jumpRange = 2f;
+    [SerializeField] private float jumpRange = 1f;
+    [SerializeField] private float timeBetweenJumps = 1.2f;
+    private float nextTimeToJump = 0f;
     Vector3 velocity;
     [SerializeField] private Transform surfaceCheck;
     private bool onSurface;
@@ -61,6 +64,9 @@ public class Player : MonoBehaviour
 
     private void ProcessMove()
     {
+        if (animator.GetBool("Dying"))
+            return;
+
         float horizontal_axis = Input.GetAxisRaw("Horizontal");
         float vertical_axis = Input.GetAxisRaw("Vertical");
 
@@ -73,7 +79,7 @@ public class Player : MonoBehaviour
         if (direction.magnitude >= 0.1f)
         {
 
-            animator.SetBool("Idle", false);
+            //animator.SetBool("Idle", false);
             
             //TODO: disable shooting while running and disable running while aiming
             CheckSprint();
@@ -84,28 +90,20 @@ public class Player : MonoBehaviour
 
         else
         {
-            animator.SetBool("Walk", false);
-            animator.SetBool("Running", false);
-            animator.SetBool("Idle", true);
+            PlayAnimation("Idle");
         }
     }
 
     private void Jump()
     {
-        //TODO : Remove the bug that allows player to jump while in the "Jump" state (add jump time delay) and disallow jumping while firing
+        //TODO : Remove the bug that allows player to jump while in the "Jump" state (add jump time delay)  -- DONE 
+        // TODO : disallow jumping while firing
 
-        if (Input.GetButtonDown("Jump") && onSurface)
+        if (Input.GetButtonDown("Jump") && onSurface && Time.time >= nextTimeToJump)
         {
-            animator.SetTrigger("Jump");
-            animator.SetBool("Idle", false);
-            animator.SetBool("Walk", false);
-            animator.SetBool("Running", false);
-            
+            PlayAnimation("Jump");
             velocity.y = Mathf.Sqrt(jumpRange * -2f * gravity);
-        }
-        else
-        {
-            animator.ResetTrigger("Jump");
+            nextTimeToJump = Time.time + timeBetweenJumps;
         }
     }
 
@@ -114,15 +112,12 @@ public class Player : MonoBehaviour
         if(Input.GetButton("Sprint") && onSurface)
         {
             speed = playerSprint;
-            animator.SetBool("Running", true); 
-            animator.SetBool("Walk", false);
+            PlayAnimation("Running");
         }
         else
         {
             speed = playerWalk;
-            if(onSurface)
-                animator.SetBool("Walk", true);
-            animator.SetBool("Running", false);
+            PlayAnimation("Walk");
         }
     }
 
@@ -142,9 +137,8 @@ public class Player : MonoBehaviour
     private void PlayerDeath()
     {
         Cursor.lockState = CursorLockMode.None;
-        //TODO: death animation??
-        Destroy(gameObject, 1f);
-        Menus.instance.ShowGameOver();
+        //TODO: death animation?? -- DONE
+        StartCoroutine(PlayerDeathAnimation());
     }
 
     public IEnumerator PlayerDamageDisplay()
@@ -153,5 +147,37 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         playerDmgSplash.SetActive(false);
 
+    }
+
+    public IEnumerator PlayerDeathAnimation()
+    {
+        PlayAnimation("Dying");
+        yield return new WaitForSeconds(3.667f);
+        Destroy(gameObject, 0.5f);
+        Menus.instance.ShowGameOver();
+    }
+
+    private void PlayAnimation(string anim)
+    {
+        if (anim.Equals("Jump"))
+            animator.SetTrigger(anim);
+        else
+            animator.SetBool(anim, true);
+        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Rifle Walk","Shoot Walk","Punch","Dying"};
+        foreach(string s in arr)
+        {
+            if (s.Equals(anim))
+                continue;
+            else if (s.Equals("Jump"))
+            {
+                animator.ResetTrigger(s);
+            }
+            else
+            {
+                animator.SetBool(s, false);
+            }
+        }
+
+        
     }
 }

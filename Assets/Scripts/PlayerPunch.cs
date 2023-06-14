@@ -6,8 +6,8 @@ public class PlayerPunch : MonoBehaviour
 {
     [SerializeField] private Camera cam;
     [SerializeField] private float giveDmg = 5f;
-    [SerializeField] private float punchRange = 3f;
-    [SerializeField] private float timeBetweenPunch = 2f;
+    [SerializeField] private float punchRange = 5f;
+    [SerializeField] private float timeBetweenPunch = 1.33f;
     private float nextTimeToPunch = 0f;
     [SerializeField] private GameObject aimCanvas;
     /*public GameObject woodEffect;
@@ -53,14 +53,39 @@ public class PlayerPunch : MonoBehaviour
     {
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToPunch)
         {
-            animator.SetBool("Punch",true);
-            animator.SetBool("Idle", false);
+            /*animator.SetBool("Punch",true);
+            animator.SetBool("Idle", false);*/
+            PlayAnimation("Punch");
             nextTimeToPunch = Time.time + timeBetweenPunch;
             Punch();
         }
         else
         {
-            animator.SetBool("Punch", false);
+            //PlayAnimation("Idle");
         }
+    }
+
+    private void PlayAnimation(string anim)
+    {
+        if (anim.Equals("Jump"))
+            animator.SetTrigger(anim);
+        else
+            animator.SetBool(anim, true);
+        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Rifle Walk", "Shoot Walk", "Punch", "Dying" };
+        foreach (string s in arr)
+        {
+            if (s.Equals(anim))
+                continue;
+            else if (s.Equals("Jump"))
+            {
+                animator.ResetTrigger(s);
+            }
+            else
+            {
+                animator.SetBool(s, false);
+            }
+        }
+
+       
     }
 }

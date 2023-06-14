@@ -17,7 +17,7 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private Transform backLeftWheelTransform;
     [SerializeField] private Transform vehicleDoor;
 
-    //TODO: tune vehicle parameters
+    //TODO: tune vehicle parameters and add a text telling that player can enter when pressing F and display controls
 
     [Header("Vehicle Engine")]
     [SerializeField] private float maxSpeed = 100f;

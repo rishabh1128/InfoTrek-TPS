@@ -20,8 +20,9 @@ public class Rifle : MonoBehaviour
     public float reloadTime = 2.5f;
     private bool reloading = false;
 
-    //TODO: change reloading mechanism to use total bullets instead of mags so u can reload as much as u want without losing bullets
-    //TODO: make a function to turn off all animations except the one to turn on, passed as a string
+    //TODO: change reloading mechanism to use total bullets instead of mags so u can reload as much as u want without losing bullets -- DONE
+    
+    //TODO: make a function to turn off all animations except the one to turn on, passed as a string -- DONE
 
     [Header("Rifle effects")]
     public ParticleSystem muzzleFlash;
@@ -37,7 +38,7 @@ public class Rifle : MonoBehaviour
 
     private void Update()
     {
-        if (reloading)
+        if (reloading || animator.GetBool("Dying"))
             return;
 
         if (totalAmmo > 0 && (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < magSize)))
@@ -52,37 +53,45 @@ public class Rifle : MonoBehaviour
 
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToShoot)
         {
-            animator.SetBool("Shoot", true);
-            animator.SetBool("Idle", false);
+            /*animator.SetBool("Shoot", true);
+            animator.SetBool("Idle", false);*/
+            PlayAnimation("Shoot");
             nextTimeToShoot = Time.time + timeBetweenShots;
             Shoot();
         }
         else if (Input.GetButton("Fire1") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
         {
-            animator.SetBool("Shoot", false);
+            /*animator.SetBool("Shoot", false);
             animator.SetBool("Walk", false);
             animator.SetBool("Shoot Walk", true);
-            animator.SetBool("Idle", false);
+            animator.SetBool("Idle", false);*/
+            PlayAnimation("Shoot Walk");
         }
         else if(Input.GetButton("Fire1"))
-        {
+        {/*
             animator.SetBool("Shoot", true);
             animator.SetBool("Idle", false);
             animator.SetBool("Shoot Walk", false);
-            animator.SetBool("Rifle Walk", false);
+            animator.SetBool("Rifle Walk", false);*/
+
+            PlayAnimation("Shoot");
         }
-        else
+        
+        else if (Input.GetButton("Fire2") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
         {
-            animator.SetBool("Shoot", false);
-            animator.SetBool("Shoot Walk", false);
-            animator.SetBool("Rifle Walk", false);
+            /* animator.SetBool("Shoot", false);
+             animator.SetBool("Rifle Walk", true);
+             animator.SetBool("Idle", false);*/
+
+            PlayAnimation("Rifle Walk");
         }
 
-        if (Input.GetButton("Fire2") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
+        else
         {
-            animator.SetBool("Shoot", false);
-            animator.SetBool("Rifle Walk", true);
-            animator.SetBool("Idle", false);
+            /*animator.SetBool("Shoot", false);
+            animator.SetBool("Shoot Walk", false);
+            animator.SetBool("Rifle Walk", false);*/
+            //PlayAnimation("Idle");
         }
     }
     private void Shoot()
@@ -141,15 +150,40 @@ public class Rifle : MonoBehaviour
         player.playerWalk = 0f;
         player.playerSprint = 0f;
         reloading = true;
-        Debug.Log("Reloading..");
-        animator.SetBool("Reloading", true);
+        //Debug.Log("Reloading..");
+        PlayAnimation("Reloading");
         //play sound
         yield return new WaitForSeconds(reloadTime);
-        animator.SetBool("Reloading", false);
+        //PlayAnimation("Idle");
         currentAmmo = magSize;
         AmmoCount.instance.updateAmmo(currentAmmo, totalAmmo);
-        player.playerWalk = 3f;
-        player.playerSprint = 6f;
+        player.playerWalk = 5f;
+        player.playerSprint = 8f;
         reloading = false;
+    }
+
+    private void PlayAnimation(string anim)
+    {
+        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Rifle Walk", "Shoot Walk", "Punch", "Dying" };
+        if (anim.Equals("Jump"))
+            animator.SetTrigger(anim);
+        else
+            animator.SetBool(anim, true);
+
+        foreach (string s in arr)
+        {
+            
+            if (s.Equals(anim))
+                continue;
+            else if (s.Equals("Jump"))
+            {
+                animator.ResetTrigger(s);
+            }
+            else
+            {
+                animator.SetBool(s, false);
+            }
+        }
+
     }
 }

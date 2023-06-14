@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Zombie Apocalypse.unity
+    guid: c0d944ca9defd20449bc336e50d75a08
+  - enabled: 1
+    path: Assets/Scenes/Zombie Apocalypse 1.unity
+    guid: b1fb600994841044e89cee2d67a6c233
+  - enabled: 1
+    path: Assets/Scenes/Zombie Apocalypse 2.unity
+    guid: 38557fde65baece4bbd6484530df0392
   m_configObjects: {}

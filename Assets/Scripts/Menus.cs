@@ -76,6 +76,7 @@ public class Menus : MonoBehaviour
         /*TPSCanvas.SetActive(false);*/
         
     }
+    //TODO: solve the bug where button remains selected
 
     public void Resume()
     {
@@ -84,7 +85,8 @@ public class Menus : MonoBehaviour
 
     public void LoadMenu()
     {
-        //TODO: load the main menu
+        //TODO: solve the animation bug on opening menu from game  -- Solved by removing animation :)
+        SceneManager.LoadScene("Main Menu");
     }
 
     public void QuitGame()
@@ -95,7 +97,7 @@ public class Menus : MonoBehaviour
 
     public void Restart()
     {
-        //TODO: restart the game
+        SceneManager.LoadScene("Main Menu");
     }
 
     public void ShowGameOver()

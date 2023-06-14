@@ -8,6 +8,7 @@ public class RiflePickup : MonoBehaviour
     [SerializeField] private GameObject weaponDisplay;
     [SerializeField] private GameObject player;
     private float radius = 2.5f; //Object will be picked up when player is in the radius and presses F
+    //TODO : add a text box indicating that player can press F to pick up gun
     
 
     private void Awake()
@@ -16,7 +17,7 @@ public class RiflePickup : MonoBehaviour
         weaponDisplay.SetActive(false);
     }
 
-    // TODO: Fix the bug where the rifle randomly shoots a bullet when being picked up
+    // TODO: Fix the bug where the rifle randomly shoots a bullet when being picked up -- related to animation bug??
 
     private void Update()
     {
