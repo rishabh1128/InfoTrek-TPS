@@ -36,16 +36,13 @@ public class Menus : MonoBehaviour
                 Pause();
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Tab) && !isGameOver)
+        else if (Input.GetKeyUp(KeyCode.Tab) && !isGameOver && isObjectiveMenu)
         {
-            if (isObjectiveMenu)
-            {
-                RemoveObjectives();
-            }
-            else
-            {
-                ShowObjectives();
-            }
+            RemoveObjectives();
+        }
+        else if(Input.GetKeyDown(KeyCode.Tab) && !isGameOver && !isObjectiveMenu)
+        {
+            ShowObjectives();
         }
     }
     public void ShowObjectives()

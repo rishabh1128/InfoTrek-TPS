@@ -32,8 +32,10 @@ public class RiflePickup : MonoBehaviour
 
                 //TODO: play pickup sound
 
-                //TODO: Objective completed
-                gameObject.SetActive(false);
+                //TODO: Objective completed -- DONE
+                Objectives.instance.CompleteObjective(0);
+
+                Destroy(gameObject, 0.1f);
             }
         }
     }

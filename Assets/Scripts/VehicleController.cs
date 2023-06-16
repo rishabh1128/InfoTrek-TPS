@@ -17,7 +17,8 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private Transform backLeftWheelTransform;
     [SerializeField] private Transform vehicleDoor;
 
-    //TODO: tune vehicle parameters and add a text telling that player can enter when pressing F and display controls
+    //TODO: tune vehicle parameters --almost DONE
+    //TODO: add a text telling that player can enter when pressing F and display controls
 
     [Header("Vehicle Engine")]
     [SerializeField] private float maxSpeed = 100f;
@@ -47,7 +48,15 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private float giveDmg = 100f;
     [SerializeField] private GameObject goreEffect;
 
-    private void Update()
+    private void Start()
+    {
+        frontLeftWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
+        frontRightWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
+        backLeftWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
+        backRightWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
+    }
+
+    private void FixedUpdate()
     {
         if(!isSitting && Vector3.Distance(transform.position,playerScript.transform.position) < radius)
         {
@@ -62,7 +71,8 @@ public class VehicleController : MonoBehaviour
                 AimCanvas.SetActive(false);
                 playerCharacter.SetActive(false);
 
-                //TODO: objective complete
+                //TODO: objective complete--DONE
+                Objectives.instance.CompleteObjective(2);
 
                 return;
             }

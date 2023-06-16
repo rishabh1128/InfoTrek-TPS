@@ -10,7 +10,8 @@ public class Player : MonoBehaviour
     public float playerSprint = 8f;
     //TODO : change sprint and walk anims and increase base speed -- DONE
     //TODO : fix the wonky animation transitions -- DONE
-    //TODO : add a third type of speed for rifle walk
+    //TODO : remove rifle walk feature, allow shooting only when standing still
+    //TODO: add the water back to the env
 
     [Header("Player Health")]
     [SerializeField] private float playerHealth = 100f;
