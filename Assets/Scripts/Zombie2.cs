@@ -126,7 +126,7 @@ public class Zombie2 : MonoBehaviour
     {
         curHealth -= takeDmg;
         healthBar.SetHealth(curHealth);
-        if (curHealth <= 0)
+        if (curHealth <= 0 && !animator.GetBool("Dying"))
         {
             animator.SetBool("Dying", true);
             zombieDeath();

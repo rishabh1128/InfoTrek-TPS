@@ -9,7 +9,9 @@ public class RiflePickup : MonoBehaviour
     [SerializeField] private GameObject player;
     private float radius = 2.5f; //Object will be picked up when player is in the radius and presses F
     //TODO : add a text box indicating that player can press F to pick up gun
-    
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip clip;
+    [SerializeField] private float vol = 0.25f;
 
     private void Awake()
     {
@@ -30,7 +32,8 @@ public class RiflePickup : MonoBehaviour
                 weaponDisplay.SetActive(true);
                 player.GetComponent<PlayerPunch>().enabled = false;
 
-                //TODO: play pickup sound
+                //TODO: play pickup sound -- DONE
+                PlaySound(clip, vol);
 
                 //TODO: Objective completed -- DONE
                 Objectives.instance.CompleteObjective(0);
@@ -38,5 +41,10 @@ public class RiflePickup : MonoBehaviour
                 Destroy(gameObject, 0.1f);
             }
         }
+    }
+    private void PlaySound(AudioClip clip, float vol)
+    {
+        audioSource.volume = vol;
+        audioSource.PlayOneShot(clip);
     }
 }

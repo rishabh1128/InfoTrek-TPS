@@ -210,4 +210,9 @@ public class Rifle : MonoBehaviour
         audioSource.volume = vol;
         audioSource.PlayOneShot(clip);
     }
+
+    public void IncreaseAmmo(int ammo)
+    {
+        totalAmmo += ammo;
+    }
 }

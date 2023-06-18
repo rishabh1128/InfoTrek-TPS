@@ -195,4 +195,9 @@ public class Player : MonoBehaviour
         audioSource.volume = vol;
         audioSource.PlayOneShot(clip);
     }
+
+    public void IncreaseHealth()
+    {
+        curHealth = playerHealth;
+    }
 }

@@ -152,7 +152,7 @@ public class BasicZombie : MonoBehaviour
     {
         curHealth -= takeDmg;
         healthBar.SetHealth(curHealth);
-        if(curHealth <= 0)
+        if(curHealth <= 0 && !animator.GetBool("Dying"))
         {
             animator.SetBool("Walking", false);
             animator.SetBool("Running", false);

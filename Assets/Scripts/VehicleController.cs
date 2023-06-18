@@ -17,7 +17,8 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private Transform backLeftWheelTransform;
     [SerializeField] private Transform vehicleDoor;
 
-    //TODO: tune vehicle parameters --almost DONE
+    //TODO: tune vehicle parameters --DONE
+    //TODO: add vehicle sound
     //TODO: add a text telling that player can enter when pressing F and display controls
 
     [Header("Vehicle Engine")]
