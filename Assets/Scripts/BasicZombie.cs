@@ -11,6 +11,7 @@ public class BasicZombie : MonoBehaviour
     [SerializeField] private Transform playerBody;
     [SerializeField] private Camera attackingRayCastArea;
     [SerializeField] private GameObject goreEffect;
+    
 
     [Header("Zombie health and dmg")]
     [SerializeField] private float zombieHealth = 100f;
@@ -35,11 +36,19 @@ public class BasicZombie : MonoBehaviour
     [Header("Zombie animations")]
     [SerializeField] private Animator animator;
 
+    [Header("Sounds")]
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] attackSounds;
+    [SerializeField] private float attackVol;
+    [SerializeField] private AudioClip[] deathSounds;
+    [SerializeField] private float deathVol;
+
     private void Awake()
     {
         zombieAgent = GetComponent<NavMeshAgent>();
         curHealth = zombieHealth;
         healthBar.GiveFullHealth(zombieHealth);
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -63,7 +72,12 @@ public class BasicZombie : MonoBehaviour
 
     private void Patrol()
     {
-        if(Vector3.Distance(walkpoints[currZombiePosition].transform.position,transform.position) < walkPointRadius) //if reached current walkpoint, change walkpoint
+        animator.SetBool("Walking", true);
+        animator.SetBool("Running", false);
+        animator.SetBool("Attacking", false);
+        animator.SetBool("Dying", false);
+
+        if (Vector3.Distance(walkpoints[currZombiePosition].transform.position,transform.position) < walkPointRadius) //if reached current walkpoint, change walkpoint
         {
             currZombiePosition = Random.Range(0, walkpoints.Length);
             if(currZombiePosition >= walkpoints.Length)
@@ -119,6 +133,10 @@ public class BasicZombie : MonoBehaviour
                 animator.SetBool("Running", false);
                 animator.SetBool("Attacking", true);
                 animator.SetBool("Dying", false);
+
+                /*audioSource.PlayOneShot(attackSounds[Random.Range(0, attackSounds.Length)]);*/
+
+                PlaySound(attackSounds[Random.Range(0, attackSounds.Length)], attackVol);
             }
             previouslyAttacked = true;
             Invoke(nameof(ActivateAttacking), timeBetweenAttack);
@@ -154,6 +172,14 @@ public class BasicZombie : MonoBehaviour
         canSeePlayer = false;
         //necessary to allow death animation to play
 
+        PlaySound(deathSounds[Random.Range(0, deathSounds.Length)],deathVol);
+
         Destroy(gameObject, 5f);
+    }
+
+    private void PlaySound(AudioClip clip, float vol)
+    {
+        audioSource.volume = vol;
+        audioSource.PlayOneShot(clip);
     }
 }

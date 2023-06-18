@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     //TODO : change sprint and walk anims and increase base speed -- DONE
     //TODO : fix the wonky animation transitions -- DONE
     //TODO : remove rifle walk feature, allow shooting only when standing still
-    //TODO: add the water back to the env
+    //TODO: add the water back to the env -- DONE
 
     [Header("Player Health")]
     [SerializeField] private float playerHealth = 100f;
@@ -39,11 +39,19 @@ public class Player : MonoBehaviour
     [SerializeField] private float surfaceDistance = 0.4f;
     [SerializeField] private LayerMask surfaceMask;
 
+    [Header("Sounds")]
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip bloodSound;
+    [SerializeField] private float bloodVol;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private float deathVol;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         curHealth = playerHealth;
         healthBar.GiveFullHealth(playerHealth);
+        audioSource = GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -126,10 +134,10 @@ public class Player : MonoBehaviour
     {
         curHealth -= takeDmg;
         healthBar.SetHealth(curHealth);
-
+        PlaySound(bloodSound,bloodVol);
         StartCoroutine(PlayerDamageDisplay());
 
-        if (curHealth <= 0)
+        if (curHealth <= 0 && !animator.GetBool("Dying"))
         {
             PlayerDeath();
         }
@@ -152,6 +160,8 @@ public class Player : MonoBehaviour
 
     public IEnumerator PlayerDeathAnimation()
     {
+        //TODO: add death sound -- DONE
+        PlaySound(deathSound, deathVol);
         PlayAnimation("Dying");
         yield return new WaitForSeconds(3.667f);
         Destroy(gameObject, 0.5f);
@@ -178,7 +188,11 @@ public class Player : MonoBehaviour
                 animator.SetBool(s, false);
             }
         }
+    }
 
-        
+    private void PlaySound(AudioClip clip, float vol)
+    {
+        audioSource.volume = vol;
+        audioSource.PlayOneShot(clip);
     }
 }

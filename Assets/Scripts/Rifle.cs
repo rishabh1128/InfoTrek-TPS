@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,8 +17,15 @@ public class Rifle : MonoBehaviour
     [Header("Rifle Ammo and shooting")]
     [SerializeField] private int magSize = 30;
     [SerializeField] private int totalAmmo = 330;
+    [SerializeField] private GameObject ammoOutDisplay;
+    [SerializeField] private AudioClip shootingSound;
+    [SerializeField] private float shootVol;
+    [SerializeField] private AudioClip reloadingSound;
+    [SerializeField] private float reloadVol;
+    private AudioSource audioSource;
+
     private int currentAmmo;
-    public float reloadTime = 2.5f;
+    public float reloadTime = 3.3f;
     private bool reloading = false;
 
     //TODO: change reloading mechanism to use total bullets instead of mags so u can reload as much as u want without losing bullets -- DONE
@@ -34,6 +42,7 @@ public class Rifle : MonoBehaviour
     {
         transform.SetParent(hand);
         currentAmmo = magSize;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -44,7 +53,7 @@ public class Rifle : MonoBehaviour
         if (totalAmmo > 0 && (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < magSize)))
         {
             int remaining = magSize - currentAmmo;
-            totalAmmo -= remaining;
+            totalAmmo = Math.Max(0, totalAmmo - remaining);
             StartCoroutine(Reload());
             return;
         }
@@ -55,7 +64,7 @@ public class Rifle : MonoBehaviour
         {
             /*animator.SetBool("Shoot", true);
             animator.SetBool("Idle", false);*/
-            PlayAnimation("Shoot");
+            PlayAnimation("Shoot");                                    //Note: The animation is played here instead of in Shoot() so that it keeps playing when the button is held down
             nextTimeToShoot = Time.time + timeBetweenShots;
             Shoot();
         }
@@ -101,7 +110,8 @@ public class Rifle : MonoBehaviour
 
         if (totalAmmo==0 && currentAmmo==0)
         {
-            //TODO: show out of ammo text
+            //TODO: show out of ammo text -- DONE
+            StartCoroutine(AmmoOutDisplayTimer());
             return;
         }
 
@@ -112,6 +122,8 @@ public class Rifle : MonoBehaviour
 
         
         muzzleFlash.Play();
+        PlaySound(shootingSound,shootVol);
+
         RaycastHit hitInfo;
         if(Physics.Raycast(cam.transform.position, cam.transform.forward,out hitInfo, shootingRange))
         {
@@ -152,7 +164,7 @@ public class Rifle : MonoBehaviour
         reloading = true;
         //Debug.Log("Reloading..");
         PlayAnimation("Reloading");
-        //play sound
+        PlaySound(reloadingSound,reloadVol);
         yield return new WaitForSeconds(reloadTime);
         //PlayAnimation("Idle");
         currentAmmo = magSize;
@@ -185,5 +197,17 @@ public class Rifle : MonoBehaviour
             }
         }
 
+    }
+    IEnumerator AmmoOutDisplayTimer()
+    {
+        ammoOutDisplay.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        ammoOutDisplay.SetActive(false);
+    }
+
+    private void PlaySound(AudioClip clip, float vol)
+    {
+        audioSource.volume = vol;
+        audioSource.PlayOneShot(clip);
     }
 }

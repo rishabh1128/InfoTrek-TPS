@@ -32,11 +32,19 @@ public class Zombie2 : MonoBehaviour
     [Header("Zombie animations")]
     [SerializeField] private Animator animator;
 
+    [Header("Sounds")]
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] attackSounds;
+    [SerializeField] private float attackVol;
+    [SerializeField] private AudioClip[] deathSounds;
+    [SerializeField] private float deathVol;
+
     private void Awake()
     {
         zombieAgent = GetComponent<NavMeshAgent>();
         curHealth = zombieHealth;
         healthBar.GiveFullHealth(zombieHealth);
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -100,7 +108,10 @@ public class Zombie2 : MonoBehaviour
 
                 animator.SetBool("Running", false);
                 animator.SetBool("Attacking", true);
+
+                PlaySound(attackSounds[Random.Range(0, attackSounds.Length)], attackVol);
             }
+            
             previouslyAttacked = true;
             Invoke(nameof(ActivateAttacking), timeBetweenAttack);
         }
@@ -131,7 +142,14 @@ public class Zombie2 : MonoBehaviour
         canAttackPlayer = false;
         canSeePlayer = false;
         //necessary to allow death animation to play
+        PlaySound(deathSounds[Random.Range(0, deathSounds.Length)], deathVol);
 
         Destroy(gameObject, 5f);
+    }
+
+    private void PlaySound(AudioClip clip, float vol)
+    {
+        audioSource.volume = vol;
+        audioSource.PlayOneShot(clip);
     }
 }
