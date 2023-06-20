@@ -29,10 +29,12 @@ public class Player : MonoBehaviour
 
     [Header("Player Jump and velocity")]
     [SerializeField] private float turnCamTime = 0.1f;
-    [SerializeField] private float turnCamVelocity;
+    private float turnCamVelocity;
     [SerializeField] private float jumpRange = 1f;
     [SerializeField] private float timeBetweenJumps = 1.2f;
     private float nextTimeToJump = 0f;
+    public bool isJumping=false;
+
     Vector3 velocity;
     [SerializeField] private Transform surfaceCheck;
     private bool onSurface;
@@ -80,12 +82,16 @@ public class Player : MonoBehaviour
         float vertical_axis = Input.GetAxisRaw("Vertical");
 
         Vector3 direction = new Vector3(horizontal_axis, 0f, vertical_axis).normalized;
-
-        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + playerCamera.eulerAngles.y; //get the angle we want the character to face after movement
+        
+        float targetAngle = playerCamera.eulerAngles.y; //get the angle we want the character to face after movement
+        if (!(Input.GetButton("Fire2") && !isJumping))
+        {
+            targetAngle += Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        }
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnCamVelocity, turnCamTime); //to smoothen the angle change
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-        if (direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.1f && !(Input.GetButton("Fire2") && !isJumping))
         {
 
             //animator.SetBool("Idle", false);
@@ -106,14 +112,20 @@ public class Player : MonoBehaviour
     private void Jump()
     {
         //TODO : Remove the bug that allows player to jump while in the "Jump" state (add jump time delay)  -- DONE 
-        // TODO : disallow jumping while firing
+        // TODO : disallow jumping while firing -- DONE
 
-        if (Input.GetButtonDown("Jump") && onSurface && Time.time >= nextTimeToJump)
+        if (Input.GetButtonDown("Jump") && onSurface && Time.time >= nextTimeToJump && !Input.GetButton("Fire2"))
         {
+            isJumping = true;
             PlayAnimation("Jump");
             velocity.y = Mathf.Sqrt(jumpRange * -2f * gravity);
             nextTimeToJump = Time.time + timeBetweenJumps;
         }
+        else if(onSurface && Time.time >= nextTimeToJump)
+        {
+            isJumping = false;
+        }
+        
     }
 
     private void CheckSprint()
@@ -174,7 +186,7 @@ public class Player : MonoBehaviour
             animator.SetTrigger(anim);
         else
             animator.SetBool(anim, true);
-        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Rifle Walk","Shoot Walk","Punch","Dying"};
+        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading","Punch","Dying"};
         foreach(string s in arr)
         {
             if (s.Equals(anim))
@@ -199,5 +211,6 @@ public class Player : MonoBehaviour
     public void IncreaseHealth()
     {
         curHealth = playerHealth;
+        healthBar.GiveFullHealth(playerHealth);
     }
 }

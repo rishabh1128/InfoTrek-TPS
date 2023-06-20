@@ -71,7 +71,7 @@ public class PlayerPunch : MonoBehaviour
             animator.SetTrigger(anim);
         else
             animator.SetBool(anim, true);
-        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Rifle Walk", "Shoot Walk", "Punch", "Dying" };
+        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Punch", "Dying" };
         foreach (string s in arr)
         {
             if (s.Equals(anim))

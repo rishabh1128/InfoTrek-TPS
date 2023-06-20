@@ -7,6 +7,8 @@ public class Rifle : MonoBehaviour
 {
     [Header("Rifle parameters")]
     [SerializeField] private Camera cam;
+    private float turnCamVelocity;
+    [SerializeField] private float turnCamTime = 0.1f;
     [SerializeField] private float giveDmg = 10f;
     [SerializeField] private float shootingRange = 100f;
     [SerializeField] private float  timeBetweenShots= 0.25f;
@@ -47,10 +49,7 @@ public class Rifle : MonoBehaviour
 
     private void Update()
     {
-        if (reloading || animator.GetBool("Dying"))
-            return;
-
-        if (totalAmmo > 0 && (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < magSize)))
+        if (totalAmmo > 0 && (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < magSize && !player.isJumping)))
         {
             int remaining = magSize - currentAmmo;
             totalAmmo = Math.Max(0, totalAmmo - remaining);
@@ -58,6 +57,10 @@ public class Rifle : MonoBehaviour
             return;
         }
 
+        if (reloading || animator.GetBool("Dying") || !(Input.GetButton("Fire2") && !player.isJumping))
+            return;
+
+        
         //TODO: Whenever shooting or aiming, face the player forward
 
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToShoot)
@@ -68,14 +71,14 @@ public class Rifle : MonoBehaviour
             nextTimeToShoot = Time.time + timeBetweenShots;
             Shoot();
         }
-        else if (Input.GetButton("Fire1") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
+        /*else if (Input.GetButton("Fire1") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
         {
-            /*animator.SetBool("Shoot", false);
+            *//*animator.SetBool("Shoot", false);
             animator.SetBool("Walk", false);
             animator.SetBool("Shoot Walk", true);
-            animator.SetBool("Idle", false);*/
+            animator.SetBool("Idle", false);*//*
             PlayAnimation("Shoot Walk");
-        }
+        }*/
         else if(Input.GetButton("Fire1"))
         {/*
             animator.SetBool("Shoot", true);
@@ -86,22 +89,22 @@ public class Rifle : MonoBehaviour
             PlayAnimation("Shoot");
         }
         
-        else if (Input.GetButton("Fire2") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
+        /*else if (Input.GetButton("Fire2") && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)))
         {
-            /* animator.SetBool("Shoot", false);
+            *//* animator.SetBool("Shoot", false);
              animator.SetBool("Rifle Walk", true);
-             animator.SetBool("Idle", false);*/
+             animator.SetBool("Idle", false);*//*
 
             PlayAnimation("Rifle Walk");
-        }
+        }*/
 
-        else
+        /*else
         {
-            /*animator.SetBool("Shoot", false);
+            *//*animator.SetBool("Shoot", false);
             animator.SetBool("Shoot Walk", false);
-            animator.SetBool("Rifle Walk", false);*/
+            animator.SetBool("Rifle Walk", false);*//*
             //PlayAnimation("Idle");
-        }
+        }*/
     }
     private void Shoot()
     {
@@ -120,7 +123,7 @@ public class Rifle : MonoBehaviour
 
         AmmoCount.instance.updateAmmo(currentAmmo, totalAmmo);
 
-        
+        //FaceForward();
         muzzleFlash.Play();
         PlaySound(shootingSound,shootVol);
 
@@ -157,6 +160,13 @@ public class Rifle : MonoBehaviour
         
     }
 
+    private void FaceForward()
+    {
+        float targetAngle = cam.transform.eulerAngles.y; //get the angle we want the character to face after movement
+        float angle = Mathf.SmoothDampAngle(player.transform.eulerAngles.y, targetAngle, ref turnCamVelocity, turnCamTime); //to smoothen the angle change
+        player.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+    }
+
     private IEnumerator Reload() //enumerator tells script to wait without hogging CPU and continue after reloading
     {
         player.playerWalk = 0f;
@@ -176,7 +186,7 @@ public class Rifle : MonoBehaviour
 
     private void PlayAnimation(string anim)
     {
-        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Rifle Walk", "Shoot Walk", "Punch", "Dying" };
+        string[] arr = { "Idle", "Walk", "Running", "Jump", "Aim", "Shoot", "Reloading", "Punch", "Dying" };
         if (anim.Equals("Jump"))
             animator.SetTrigger(anim);
         else
@@ -214,5 +224,6 @@ public class Rifle : MonoBehaviour
     public void IncreaseAmmo(int ammo)
     {
         totalAmmo += ammo;
+        AmmoCount.instance.updateAmmo(currentAmmo, totalAmmo);
     }
 }
