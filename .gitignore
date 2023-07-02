@@ -1,2 +1,3 @@
-#Ignore base zombie fbx file
+#Ignore large files
 Assets/Enemies/Basic Zombie/Base Zombie.fbx
+Library/PlayerDataCache/

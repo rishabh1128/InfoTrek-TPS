@@ -27,6 +27,7 @@ public class Rifle : MonoBehaviour
     private AudioSource audioSource;
 
     private int currentAmmo;
+    private int remaining;
     public float reloadTime = 3.3f;
     private bool reloading = false;
 
@@ -49,11 +50,22 @@ public class Rifle : MonoBehaviour
 
     private void Update()
     {
-        if (totalAmmo > 0 && (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < magSize && !player.isJumping)))
+        if (totalAmmo > 0 && (currentAmmo == 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo < magSize && !player.isJumping)))
         {
-            int remaining = magSize - currentAmmo;
-            totalAmmo = Math.Max(0, totalAmmo - remaining);
-            StartCoroutine(Reload());
+            if (currentAmmo + totalAmmo >= 30)
+            {
+                remaining = magSize - currentAmmo;
+                totalAmmo = Math.Max(0, totalAmmo - remaining);
+                /*if (totalAmmo < 0) totalAmmo = 0;*/
+                StartCoroutine(Reload());
+                currentAmmo += remaining;
+            }
+            else
+            {
+                currentAmmo += totalAmmo;
+                totalAmmo = 0;
+                StartCoroutine(Reload());
+            }
             return;
         }
 
@@ -177,7 +189,6 @@ public class Rifle : MonoBehaviour
         PlaySound(reloadingSound,reloadVol);
         yield return new WaitForSeconds(reloadTime);
         //PlayAnimation("Idle");
-        currentAmmo = magSize;
         AmmoCount.instance.updateAmmo(currentAmmo, totalAmmo);
         player.playerWalk = 5f;
         player.playerSprint = 8f;
