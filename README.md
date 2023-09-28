@@ -23,4 +23,4 @@
 
 13. MAJOR BUG - Aim state does not get triggered after exiting from car ---- FIXED
 
-14. Add a display for character controls on main menu -- IMP (DO INSTEAD OF THE SEPARATE TEXT BOXES)
+14. Add a display for character controls on main menu -- IMP (DO INSTEAD OF THE SEPARATE TEXT BOXES) --- DONE
