@@ -2,25 +2,25 @@
 
 ## TODOS:
 
-1. Add spotlights to guide players to objective, and display objective complete text.
+1. Add spotlights to guide players to objective, and display objective complete text. --- DONE
 
-2. Add a timer mechanism for scoring, plus leaderboard. --HIGH PRIORITY
+2. Add a timer mechanism for scoring, plus leaderboard. -- Scoring done, leaderboard login remains
 
-3. add a text box indicating that player can press F to pick up gun -- see 20
+3. add a text box indicating that player can press F to pick up gun -- see last
 
-6. solve the bug where pause menu buttons remain selected
+4. solve the bug where pause menu buttons remain selected -- DONE
 
-10. add different impacts to ground -- low priority
+5. add different impacts to ground -- LEAVE
 
-12. add vehicle sound -- low priority
+6. add vehicle sound -- low priority
 
-13. add a text telling that player can enter car when pressing F and display controls -- see 20
-14. add a text telling player can take pickup by pressing F OR just pickup by walking over it. -- see 20
-15. Add more spawn points
-16. Do more level design
-17. do the dramatic stuff leading upto "Survive" like oops car broke down or smthng and make a new scene
-18. add some cool music
+7. add a text telling that player can enter car when pressing F and display controls -- see last
+8. add a text telling player can take pickup by pressing F OR just pickup by walking over it. -- see last
+9. Add more spawn points -- DONE
+10. Do more level design -- DONE
+11. do the dramatic stuff leading upto "Survive" like oops car broke down or smthng and make a new scene -- DONE
+12. add some cool music
 
-19.  MAJOR BUG - Aim state does not get triggered after exiting from car
+13. MAJOR BUG - Aim state does not get triggered after exiting from car ---- FIXED
 
-20. Add a display for character controls on main menu -- IMP (DO INSTEAD OF THE SEPARATE TEXT BOXES)
+14. Add a display for character controls on main menu -- IMP (DO INSTEAD OF THE SEPARATE TEXT BOXES)

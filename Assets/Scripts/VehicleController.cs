@@ -34,13 +34,12 @@ public class VehicleController : MonoBehaviour
     [Header("Vehicle Security")]
     [SerializeField] private Player playerScript;
     private float radius = 5f;
-    private bool isSitting = false;
 
     [Header("Things to Disable")]
     [SerializeField] private GameObject AimCam;
     [SerializeField] private GameObject AimCanvas;
     [SerializeField] private GameObject TPSCam;
-    [SerializeField] private GameObject TPSCanvas;
+    //[SerializeField] private GameObject TPSCanvas;
     [SerializeField] private GameObject playerCharacter;
 
     [Header("Vehicle Hit variables")]
@@ -49,51 +48,68 @@ public class VehicleController : MonoBehaviour
     [SerializeField] private float giveDmg = 100f;
     [SerializeField] private GameObject goreEffect;
 
+
+    private bool isObjectiveComplete = false;
+    [SerializeField] private Objective2 obj2;
+    [SerializeField] private GameObject nextObjective;
+    [SerializeField] private GameObject nextObjectiveLights;
+    [SerializeField] private GameObject objLights;
+
     private void Start()
     {
+        //solve vehicle jitter
+
         frontLeftWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
         frontRightWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
         backLeftWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
         backRightWheelCollider.ConfigureVehicleSubsteps(5, 12, 15);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if(!isSitting && Vector3.Distance(transform.position,playerScript.transform.position) < radius)
+        if(!playerScript.inCar && Vector3.Distance(transform.position,playerScript.transform.position) < radius)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                isSitting = true;
+                playerScript.inCar = true;
                 radius = 5000f;
 
                 TPSCam.SetActive(false);
-                TPSCanvas.SetActive(false);
+                //TPSCanvas.SetActive(false);
                 AimCam.SetActive(false);
                 AimCanvas.SetActive(false);
                 playerCharacter.SetActive(false);
 
                 //TODO: objective complete--DONE
-                Objectives.instance.CompleteObjective(2);
-
-                return;
+                if (!isObjectiveComplete && obj2.obj2Completed)
+                {
+                    Objectives.instance.CompleteObjective(2);
+                    isObjectiveComplete = true;
+                    nextObjective.SetActive(true);
+                    nextObjectiveLights.SetActive(true);
+                    objLights.SetActive(false);
+                }
+                
             }
             
         }
 
-        if (isSitting)
+        if (playerScript.inCar)
         {
 
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.G))
             {
                 playerScript.transform.position = vehicleDoor.transform.position;
-                isSitting = false;
+                playerScript.inCar = false;
                 radius = 5f;
 
                 TPSCam.SetActive(true);
-                TPSCanvas.SetActive(true);
+                //TPSCanvas.SetActive(true);
                 AimCam.SetActive(true);
                 AimCanvas.SetActive(true);
                 playerCharacter.SetActive(true);
+
+                return;
             }
 
             MoveVehicle();
@@ -106,8 +122,8 @@ public class VehicleController : MonoBehaviour
     {
         frontRightWheelCollider.motorTorque = currSpeed;
         frontLeftWheelCollider.motorTorque = currSpeed;
-        backLeftWheelCollider.motorTorque = currSpeed;
-        backRightWheelCollider.motorTorque = currSpeed;
+        /*backLeftWheelCollider.motorTorque = currSpeed;
+        backRightWheelCollider.motorTorque = currSpeed;*/
         //four wheel drive
 
         currSpeed = maxSpeed * -Input.GetAxis("Vertical");

@@ -8,17 +8,16 @@ public class SwitchCamera : MonoBehaviour
     [SerializeField] private GameObject aimCam;
     [SerializeField] private GameObject aimCanvas;
     [SerializeField] private GameObject TPSCam;
-    [SerializeField] private GameObject TPSCanvas;
     public Animator animator;
     [SerializeField] private Player player;
 
-    //TODO: Turn off aiming when running or jumping
+    //TODO: Turn off aiming when running or jumping -- DONE
+    
     private void Update()
     {
         if (Input.GetButton("Fire2") && !player.isJumping)
         {
             TPSCam.SetActive(false);
-            TPSCanvas.SetActive(false);
             aimCam.SetActive(true);
             aimCanvas.SetActive(true);
             /*animator.SetBool("Aim", true);
@@ -28,7 +27,6 @@ public class SwitchCamera : MonoBehaviour
         else
         {
             TPSCam.SetActive(true);
-            TPSCanvas.SetActive(true);
             aimCam.SetActive(false);
             aimCanvas.SetActive(false);
             //animator.SetBool("Aim", false);

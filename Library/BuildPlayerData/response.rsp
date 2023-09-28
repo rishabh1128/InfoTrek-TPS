@@ -2,6 +2,7 @@
 -a="D:\Unity Projects\TPS Zombie\Library\PlayerScriptAssemblies\Cinemachine.dll"
 -a="D:\Unity Projects\TPS Zombie\Library\PlayerScriptAssemblies\UnityEngine.TestRunner.dll"
 -a="D:\Unity Projects\TPS Zombie\Library\PlayerScriptAssemblies\Unity.Timeline.dll"
+-a="D:\Unity Projects\TPS Zombie\Library\PlayerScriptAssemblies\PlayFab.dll"
 -a="D:\Unity Projects\TPS Zombie\Library\PlayerScriptAssemblies\Unity.TextMeshPro.dll"
 -a="D:\Unity Projects\TPS Zombie\Library\PlayerScriptAssemblies\UnityEngine.UI.dll"
 -a="D:\Unity Projects\TPS Zombie\Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\AOT\Newtonsoft.Json.dll"

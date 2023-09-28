@@ -5,21 +5,26 @@ using UnityEngine.AI; //added for NavMeshAgent
 
 public class BasicZombie : MonoBehaviour
 {
+    // TODO : define an abstract class zombie and make different types as sub classes
+
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private NavMeshAgent zombieAgent;
     [SerializeField] private Transform lookPoint;
     [SerializeField] private Transform playerBody;
     [SerializeField] private Camera attackingRayCastArea;
     [SerializeField] private GameObject goreEffect;
+    [SerializeField] private Player player;
     
 
     [Header("Zombie health and dmg")]
     [SerializeField] private float zombieHealth = 100f;
     private float curHealth;
+    private bool isAlive;
     [SerializeField] private float giveDmg = 5f;
     [SerializeField] private float timeBetweenAttack = 3f;
     private bool previouslyAttacked;
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private int scoreToGive = 100;
 
     [Header("Zombie walk")]
     public GameObject[] walkpoints;
@@ -47,6 +52,7 @@ public class BasicZombie : MonoBehaviour
     {
         zombieAgent = GetComponent<NavMeshAgent>();
         curHealth = zombieHealth;
+        isAlive = true;
         healthBar.GiveFullHealth(zombieHealth);
         audioSource = GetComponent<AudioSource>();
     }
@@ -64,7 +70,7 @@ public class BasicZombie : MonoBehaviour
         {
             Pursue();
         }
-        else
+        else if(!player.inCar)
         {
             Attack();
         }
@@ -152,8 +158,9 @@ public class BasicZombie : MonoBehaviour
     {
         curHealth -= takeDmg;
         healthBar.SetHealth(curHealth);
-        if(curHealth <= 0 && !animator.GetBool("Dying"))
+        if(curHealth <= 0 && isAlive)
         {
+            isAlive = false;
             animator.SetBool("Walking", false);
             animator.SetBool("Running", false);
             animator.SetBool("Attacking", false);
@@ -173,6 +180,7 @@ public class BasicZombie : MonoBehaviour
         //necessary to allow death animation to play
 
         PlaySound(deathSounds[Random.Range(0, deathSounds.Length)],deathVol);
+        player.IncreaseScore(scoreToGive);
 
         Destroy(gameObject, 5f);
     }

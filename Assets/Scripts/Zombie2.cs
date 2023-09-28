@@ -11,14 +11,17 @@ public class Zombie2 : MonoBehaviour
     [SerializeField] private Transform playerBody;
     [SerializeField] private Camera attackingRayCastArea;
     [SerializeField] private GameObject goreEffect;
+    [SerializeField] private Player player;
 
     [Header("Zombie health and dmg")]
     [SerializeField] private float zombieHealth = 100f;
     private float curHealth;
+    private bool isAlive;
     [SerializeField] private float giveDmg = 2.5f;
     [SerializeField] private float timeBetweenAttack = 1f;
     private bool previouslyAttacked;
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private int scoreToGive = 100;
 
    
     /*[SerializeField] private float zombieSpeed = 3f;*/
@@ -43,6 +46,7 @@ public class Zombie2 : MonoBehaviour
     {
         zombieAgent = GetComponent<NavMeshAgent>();
         curHealth = zombieHealth;
+        isAlive = true;
         healthBar.GiveFullHealth(zombieHealth);
         audioSource = GetComponent<AudioSource>();
     }
@@ -60,7 +64,7 @@ public class Zombie2 : MonoBehaviour
         {
             Pursue();
         }
-        else
+        else if(!player.inCar)
         {
             Attack();
         }
@@ -126,8 +130,9 @@ public class Zombie2 : MonoBehaviour
     {
         curHealth -= takeDmg;
         healthBar.SetHealth(curHealth);
-        if (curHealth <= 0 && !animator.GetBool("Dying"))
+        if (curHealth <= 0 && isAlive)
         {
+            isAlive = false;
             animator.SetBool("Dying", true);
             zombieDeath();
         }
@@ -143,6 +148,7 @@ public class Zombie2 : MonoBehaviour
         canSeePlayer = false;
         //necessary to allow death animation to play
         PlaySound(deathSounds[Random.Range(0, deathSounds.Length)], deathVol);
+        player.IncreaseScore(scoreToGive);
 
         Destroy(gameObject, 5f);
     }

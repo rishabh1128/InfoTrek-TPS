@@ -12,7 +12,10 @@ public class RiflePickup : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip clip;
     [SerializeField] private float vol = 0.25f;
-
+    [SerializeField] private GameObject DangerZone;
+    [SerializeField] private GameObject nextObjective;
+    [SerializeField] private GameObject nextObjectiveLights;
+    [SerializeField] private GameObject objLights;
     private void Awake()
     {
         PlayerRifle.SetActive(false);
@@ -37,6 +40,11 @@ public class RiflePickup : MonoBehaviour
 
                 //TODO: Objective completed -- DONE
                 Objectives.instance.CompleteObjective(0);
+
+                DangerZone.SetActive(true);
+                nextObjective.SetActive(true);
+                nextObjectiveLights.SetActive(true);
+                objLights.SetActive(false);
 
                 Destroy(gameObject, 0.1f);
             }

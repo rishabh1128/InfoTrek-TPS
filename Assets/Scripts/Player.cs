@@ -10,14 +10,16 @@ public class Player : MonoBehaviour
     public float playerSprint = 8f;
     //TODO : change sprint and walk anims and increase base speed -- DONE
     //TODO : fix the wonky animation transitions -- DONE
-    //TODO : remove rifle walk feature, allow shooting only when standing still
+    //TODO : remove rifle walk feature, allow shooting only when standing still -- DONE
     //TODO: add the water back to the env -- DONE
+    public bool inCar = false;
 
     [Header("Player Health")]
     [SerializeField] private float playerHealth = 100f;
     private float curHealth;
     [SerializeField] private GameObject playerDmgSplash;
     [SerializeField] private HealthBar healthBar;
+    private bool isAlive;
 
     [Header("Player Cameras")]
     [SerializeField] Transform playerCamera;
@@ -48,10 +50,15 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private float deathVol;
 
+    [Header("Score")]
+    private int score;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         curHealth = playerHealth;
+        isAlive = true;
+        score = 0;
         healthBar.GiveFullHealth(playerHealth);
         audioSource = GetComponent<AudioSource>();
     }
@@ -149,8 +156,9 @@ public class Player : MonoBehaviour
         PlaySound(bloodSound,bloodVol);
         StartCoroutine(PlayerDamageDisplay());
 
-        if (curHealth <= 0 && !animator.GetBool("Dying"))
+        if (curHealth <= 0 && isAlive)
         {
+            isAlive = false;
             PlayerDeath();
         }
     }
@@ -178,6 +186,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(3.667f);
         Destroy(gameObject, 0.5f);
         Menus.instance.ShowGameOver();
+        PlayFabManager.instance.SendLeaderboard(score);
     }
 
     private void PlayAnimation(string anim)
@@ -212,5 +221,15 @@ public class Player : MonoBehaviour
     {
         curHealth = playerHealth;
         healthBar.GiveFullHealth(playerHealth);
+    }
+
+    public void IncreaseScore(int value)
+    {
+        score += value;
+    }
+
+    public int getScore()
+    {
+        return score;
     }
 }

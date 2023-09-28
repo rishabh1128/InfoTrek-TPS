@@ -14,6 +14,7 @@ public class HealthBoost : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip audioClip;
     [SerializeField] private float vol;
+    private bool given = false;
 
     [Header("Animation")]
     [SerializeField] private Animator animator;
@@ -22,11 +23,11 @@ public class HealthBoost : MonoBehaviour
     {
         if(Vector3.Distance(transform.position,player.transform.position) < radius)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F) && !given)
             {
                 animator.SetBool("Open", true);
                 player.IncreaseHealth();
-
+                given = true;
                 PlaySound(audioClip, vol);
                 Destroy(gameObject, 1.5f);
             }

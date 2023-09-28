@@ -40,8 +40,8 @@ public class Rifle : MonoBehaviour
     public GameObject woodEffect;
     public GameObject goreEffect;
     public Animator animator;
-
-    private void Awake()
+   
+    private void Start()
     {
         transform.SetParent(hand);
         currentAmmo = magSize;
@@ -73,7 +73,7 @@ public class Rifle : MonoBehaviour
             return;
 
         
-        //TODO: Whenever shooting or aiming, face the player forward
+        //TODO: Whenever shooting or aiming, face the player forward -- DONE
 
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToShoot)
         {

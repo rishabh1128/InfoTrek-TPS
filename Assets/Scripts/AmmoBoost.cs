@@ -9,6 +9,7 @@ public class AmmoBoost : MonoBehaviour
     [SerializeField] private Rifle rifle;
     private int ammoToGive = 120;
     private float radius = 2.5f;
+    private bool given = false;
 
     [Header("Sounds")]
     [SerializeField] private AudioSource audioSource;
@@ -22,14 +23,15 @@ public class AmmoBoost : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, rifle.transform.position) < radius)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F) && !given)
             {
                 animator.SetBool("Open", true);
                 rifle.IncreaseAmmo(ammoToGive);
-
+                given = true;
                 PlaySound(audioClip, vol);
                 Destroy(gameObject, 1.5f);
             }
+            
         }
     }
 
