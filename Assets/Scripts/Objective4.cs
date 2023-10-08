@@ -12,6 +12,7 @@ public class Objective4 : MonoBehaviour
     [SerializeField] private GameObject TPSCam;
     [SerializeField] private GameObject AimCam;
     [SerializeField] private GameObject AimCanvas;
+    [SerializeField] private VehicleController vehicle;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,27 +20,30 @@ public class Objective4 : MonoBehaviour
         {
             gameObject.GetComponent<BoxCollider>().enabled = false;
             Objectives.instance.CompleteObjective(3);
+
+            StartCoroutine(SetUpNextObjective());
            
             // TODO: do the dramatic stuff leading upto "Survive" like oops car broke down or smthng -- DONE
-
-            playerScript.transform.position = vehicleDoor.transform.position;
-            playerScript.inCar = false;
-            TPSCam.SetActive(true);
-            AimCam.SetActive(true);
-            AimCanvas.SetActive(true);
-            playerCharacter.SetActive(true);
-            Destroy(other.gameObject, 2f);
-
-            StartCoroutine(WaitForNext());
-
-            nextObjective.SetActive(true);
-            Destroy(gameObject, 30f);
         }
     }
-    IEnumerator WaitForNext()
+    IEnumerator SetUpNextObjective()
     {
         nextObjectiveFlashScreen.SetActive(true);
-        yield return new WaitForSeconds(15f);
+        
+        yield return new WaitForSeconds(2f);
+
+        vehicle.isBroken = true;
+        playerScript.transform.position = vehicleDoor.transform.position;
+        playerScript.inCar = false;
+        TPSCam.SetActive(true);
+        AimCam.SetActive(true);
+        AimCanvas.SetActive(true);
+        playerCharacter.SetActive(true);
+
+        yield return new WaitForSeconds(30f);
+        
         nextObjectiveFlashScreen.SetActive(false);
+        nextObjective.SetActive(true);
+        Destroy(gameObject, 1f);
     }
 }

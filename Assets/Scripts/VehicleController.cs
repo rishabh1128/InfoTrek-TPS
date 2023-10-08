@@ -50,6 +50,7 @@ public class VehicleController : MonoBehaviour
 
 
     private bool isObjectiveComplete = false;
+    public bool isBroken = false;
     [SerializeField] private Objective2 obj2;
     [SerializeField] private GameObject nextObjective;
     [SerializeField] private GameObject nextObjectiveLights;
@@ -67,7 +68,7 @@ public class VehicleController : MonoBehaviour
 
     private void Update()
     {
-        if(!playerScript.inCar && Vector3.Distance(transform.position,playerScript.transform.position) < radius)
+        if(!playerScript.inCar && !isBroken && Vector3.Distance(transform.position,playerScript.transform.position) < radius)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {

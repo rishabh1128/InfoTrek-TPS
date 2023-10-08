@@ -11,6 +11,7 @@ public class Menus : MonoBehaviour
     [SerializeField] private GameObject objectiveMenu;
     [SerializeField] private GameObject playerUI;
     /*[SerializeField] private GameObject TPSCanvas;*/
+    [SerializeField] private Player player;
 
     public static Menus instance;
 
@@ -83,12 +84,22 @@ public class Menus : MonoBehaviour
     public void LoadMenu()
     {
         //TODO: solve the animation bug on opening menu from game  -- Solved by removing animation :)
+        
+        //Update max score
+        PlayFabManager.instance.SaveMaxScore(player.getScore());
+        PlayFabManager.instance.SendLeaderboard(player.getScore());
+
         SceneManager.LoadScene("Main Menu");
     }
 
     public void QuitGame()
     {
         Debug.Log("Quitting game...");
+
+        //Update max score
+        PlayFabManager.instance.SaveMaxScore(player.getScore());
+        PlayFabManager.instance.SendLeaderboard(player.getScore());
+
         Application.Quit();
     }
 
@@ -119,4 +130,6 @@ public class Menus : MonoBehaviour
        /* TPSCanvas.SetActive(true);*/
         
     }
+
+
 }

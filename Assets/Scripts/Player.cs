@@ -45,8 +45,8 @@ public class Player : MonoBehaviour
 
     [Header("Sounds")]
     private AudioSource audioSource;
-    [SerializeField] private AudioClip bloodSound;
-    [SerializeField] private float bloodVol;
+    //[SerializeField] private AudioClip bloodSound;
+    //[SerializeField] private float bloodVol;
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private float deathVol;
 
@@ -153,7 +153,7 @@ public class Player : MonoBehaviour
     {
         curHealth -= takeDmg;
         healthBar.SetHealth(curHealth);
-        PlaySound(bloodSound,bloodVol);
+        //PlaySound(bloodSound,bloodVol);
         StartCoroutine(PlayerDamageDisplay());
 
         if (curHealth <= 0 && isAlive)
@@ -184,8 +184,10 @@ public class Player : MonoBehaviour
         PlaySound(deathSound, deathVol);
         PlayAnimation("Dying");
         yield return new WaitForSeconds(3.667f);
-        Destroy(gameObject, 0.5f);
+        Destroy(gameObject, 5f);
         Menus.instance.ShowGameOver();
+        //Update scores
+        PlayFabManager.instance.SaveMaxScore(score);
         PlayFabManager.instance.SendLeaderboard(score);
     }
 
