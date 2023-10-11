@@ -87,6 +87,7 @@ public class PlayFabManager : MonoBehaviour
     private void Start()
     {
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
    /* private void Login()
     {

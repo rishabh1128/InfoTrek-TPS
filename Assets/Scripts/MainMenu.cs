@@ -9,6 +9,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject leaderboard;
     //TODO: remove select char button and activate function on clicking play  --DONE
     [SerializeField] private GameObject instructions;
+    [SerializeField] private PlayFabManager playFabManager;
+
+    private void Awake()
+    {
+        playFabManager.GetMaxScore();
+    }
     public void OnPlay()
     {
         instructions.SetActive(true);
