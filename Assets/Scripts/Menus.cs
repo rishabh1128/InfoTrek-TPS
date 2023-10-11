@@ -10,6 +10,7 @@ public class Menus : MonoBehaviour
     [SerializeField] private GameObject gameOver;
     [SerializeField] private GameObject objectiveMenu;
     [SerializeField] private GameObject playerUI;
+    [SerializeField] private GameObject instructionsScreen;
     /*[SerializeField] private GameObject TPSCanvas;*/
     [SerializeField] private Player player;
 
@@ -18,6 +19,7 @@ public class Menus : MonoBehaviour
     private bool isPaused = false;
     private bool isGameOver = false;
     private bool isObjectiveMenu = false;
+    public bool isInstructions = false;
 
     private void Awake()
     {
@@ -26,7 +28,7 @@ public class Menus : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !isGameOver)
+        if (Input.GetKeyDown(KeyCode.Escape) && !isGameOver && !isInstructions)
         {
             if (isPaused)
             {
@@ -41,7 +43,7 @@ public class Menus : MonoBehaviour
         {
             RemoveObjectives();
         }
-        else if(Input.GetKeyDown(KeyCode.Tab) && !isGameOver && !isObjectiveMenu)
+        else if(Input.GetKeyDown(KeyCode.Tab) && !isGameOver && !isObjectiveMenu && !isInstructions)
         {
             ShowObjectives();
         }
@@ -74,7 +76,7 @@ public class Menus : MonoBehaviour
         /*TPSCanvas.SetActive(false);*/
         
     }
-    //TODO: solve the bug where button remains selected
+    //TODO: solve the bug where button remains selected -- SOLVED
 
     public void Resume()
     {
@@ -117,6 +119,14 @@ public class Menus : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         isGameOver = true;
     }
+
+    public void ShowInstructions()
+    {
+        pauseMenu.SetActive(false);
+        instructionsScreen.SetActive(true);
+        isInstructions = true;
+    }
+
 
     private void CloseAllMenus()
     {

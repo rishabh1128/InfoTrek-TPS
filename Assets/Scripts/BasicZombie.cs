@@ -33,7 +33,7 @@ public class BasicZombie : MonoBehaviour
     private float walkPointRadius = 2f;
 
     [Header("Zombie states")]
-    [SerializeField] private float visionRadius=10f;
+    [SerializeField] private float visionRadius=20f;
     [SerializeField] private float attackRadius=1.5f;
     public bool canSeePlayer;
     public bool canAttackPlayer;
